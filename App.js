@@ -20,69 +20,22 @@ import {
   View,
 } from 'react-native';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
-const getRandomWord = () => {
-  console.log('getRandomWord');
-  
-  axios.get("https://random-word-api.herokuapp.com/word")
-      .then(response => {
-          console.log('getting data from axios', response.data);
-          setTimeout(() => {
-              return("Hello");
-          }, 2000)
-      })
-      .catch(error => {
-          console.log(error);
-      });
-}
-
-const goForFetch = () => {
-  // this.setState({
-  //     fromFetch: true,
-  //     loading: true,
-
-  // })
-  fetch("https://random-word-api.herokuapp.com/word?length=5&&number=4")
-      .then(response => response.json())
-      .then((responseJson) => {
-          console.log('getting data from fetch', responseJson)
-          console.log('first word is:', responseJson[0])
-          // this.setState({
-          //     loading: false,
-          //     dataSource: responseJson
-          // })
-      })
-      .catch(error => console.log(error))
-}
-
-const randomWord = () => {
-  console.log('randomWord');
-  return getRandomWord();
-}
+import {getRandomWord} from './src/apiFetch';
+import Keyboard from './views/keyboard';
 
 const App: () => Node = () => {
   const isDarkMode = useColorScheme() === 'dark';
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
   return (
-    <SafeAreaView style={backgroundStyle}>
+    <SafeAreaView>
       <View style={styles.lettersViewStyle}>
         <Text>test</Text>
         <Button 
-          onPress={goForFetch}
+          onPress={getRandomWord}
           title='Fetch Random Word'
         />
       </View>
+      <Keyboard />
     </SafeAreaView>
   );
 };
