@@ -22,6 +22,7 @@ import {
 
 import {getRandomWord} from './src/apiFetch';
 import Keyboard from './views/keyboard';
+import Key from './components/key';
 
 const App: () => Node = () => {
   const isDarkMode = useColorScheme() === 'dark';
@@ -36,6 +37,9 @@ const App: () => Node = () => {
         />
       </View>
       <Keyboard />
+      <Key letter='A' NW='green' SW='green' NE='gray' SE='white'/>
+      <Key letter='B' NW='white' SW='green' NE='gray' SE='white'/>
+      <Key letter='C' NW='white' SW='green' NE='gray' SE='white'/>
     </SafeAreaView>
   );
 };
