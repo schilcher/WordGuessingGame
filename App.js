@@ -6,8 +6,7 @@
  * @flow strict-local
  */
 
-import React from 'react';
-import type {Node} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Button,
   SafeAreaView,
@@ -22,10 +21,28 @@ import {
 
 import {getRandomWord} from './src/apiFetch';
 import Keyboard from './views/keyboard';
-import Key from './components/key';
 
-const App: () => Node = () => {
+const App = () => {
   const isDarkMode = useColorScheme() === 'dark';
+  const [gameState, setGameState] = useState({
+    qNW: 'white',
+    qSW: 'white',
+    qNE: 'white',
+    qSE: 'white',
+  });
+
+  const log = () => {
+    console.log('state:', gameState);
+  }
+
+  updateGameState = (letterPressed) => {
+    console.log('pressed', letterPressed);
+    let newState = {...gameState};
+    newState.qNW = 'green'
+    newState.qSE = 'gray'
+    setGameState(newState);
+    console.log('state:', gameState);
+  }
 
   return (
     <SafeAreaView>
@@ -36,10 +53,7 @@ const App: () => Node = () => {
           title='Fetch Random Word'
         />
       </View>
-      <Keyboard />
-      <Key letter='A' NW='green' SW='green' NE='gray' SE='white'/>
-      <Key letter='B' NW='white' SW='green' NE='gray' SE='white'/>
-      <Key letter='C' NW='white' SW='green' NE='gray' SE='white'/>
+      <Keyboard updateGameState={updateGameState} gamestate={gameState} />
     </SafeAreaView>
   );
 };

@@ -5,7 +5,8 @@ import {StyleSheet, View, Text, useWindowDimensions} from 'react-native';
 
 const Key = (props) => {
     const windowWidth = useWindowDimensions().width;
-    console.log('window width:', windowWidth);
+    // console.log('window width:', windowWidth);
+    // console.log('half width:', Math.floor(windowWidth / 24))
     const { styles } = useStyle(windowWidth);
 
     return (
@@ -36,15 +37,18 @@ const quadColor = (color, styles) => {
         return <View style={styles.greenQuarter}></View>
     } else if (color == 'gray') {
         return <View style={styles.grayQuarter}></View>
+    } else if (color == 'red') {
+        return <View style={styles.redQuarter}></View>
     } else {
         return <View style={styles.whiteQuarter}></View>
     }
 }
 
 const useStyle = (windowWidth) => {
-    const keyWidth = windowWidth / 13;
-    const keyHeight = windowWidth / 12;
-    const fontSize = windowWidth / 13;
+    // round down to remove decimal to prevent line between views on keys
+    const keyWidth = Math.floor(windowWidth / 26) * 2;
+    const keyHeight = Math.floor(windowWidth / 24) * 2;
+    const fontSize = Math.floor(windowWidth / 13);
     
     const styles = StyleSheet.create({
         keyOutlineStyle: {
@@ -54,6 +58,9 @@ const useStyle = (windowWidth) => {
             backgroundColor: 'blue',
             height: keyHeight,
             width: keyWidth,
+            margin: 2,
+            borderRadius: 5,
+            overflow: 'hidden',
         },
         halfStyle: {
             flexDirection: 'column',
@@ -73,6 +80,11 @@ const useStyle = (windowWidth) => {
         },
         grayQuarter: {
             backgroundColor: 'lightgray',
+            height: keyHeight / 2,
+            width: keyWidth / 2,
+        },
+        redQuarter: {
+            backgroundColor: 'red',
             height: keyHeight / 2,
             width: keyWidth / 2,
         },
