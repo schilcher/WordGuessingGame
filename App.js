@@ -20,7 +20,8 @@ import {
 } from 'react-native';
 
 import {getRandomWord} from './src/apiFetch';
-import Keyboard from './views/keyboard';
+import Keyboard from './components/keyboard';
+import Tileboard from './components/tileboard';
 
 const App = () => {
   const isDarkMode = useColorScheme() === 'dark';
@@ -47,12 +48,15 @@ const App = () => {
   return (
     <SafeAreaView>
       <View style={styles.lettersViewStyle}>
-        <Text>test</Text>
         <Button 
           onPress={getRandomWord}
           title='Fetch Random Word'
         />
       </View>
+      <Tileboard />
+
+      <View style={{height: 20,}}></View>
+
       <Keyboard updateGameState={updateGameState} gamestate={gameState} />
     </SafeAreaView>
   );
@@ -76,7 +80,8 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   lettersViewStyle: {
-    backgroundColor: 'red',
+    backgroundColor: 'lightgray',
+    borderRadius: 5,
   },
 });
 

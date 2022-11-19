@@ -1,6 +1,6 @@
-import React, { Component, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import {StyleSheet, View, Text, Pressable} from 'react-native';
-import Key from '../components/key';
+import Key from './key';
 
 const Keyboard = (props) => {
 
