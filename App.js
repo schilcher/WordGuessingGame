@@ -22,8 +22,12 @@ import {
 import {getRandomWord} from './src/apiFetch';
 import Keyboard from './components/keyboard';
 import Tileboard from './components/tileboard';
+import Icon from 'react-native-vector-icons/Ionicons';
+
+
 
 const App = () => {
+  Icon.loadFont();
   const isDarkMode = useColorScheme() === 'dark';
   const [gameState, setGameState] = useState({
     qNW: 'white',
@@ -31,18 +35,94 @@ const App = () => {
     qNE: 'white',
     qSE: 'white',
   });
+  const [guess, setGuess] = useState('');
+  const [guessNumber, setGuessNumber] = useState(0);
+  const [tileboardState, setTileboardState] = useState({
+    UL: ['', '', '', '', '', '', '', '', '',],
+    UR: ['', '', '', '', '', '', '', '', '',],
+    BL: ['', '', '', '', '', '', '', '', '',],
+    BR: ['', '', '', '', '', '', '', '', '',],
+    ULcolors: [
+      ['', '', '', '', '',], 
+      ['', '', '', '', '',], 
+      ['', '', '', '', '',], 
+      ['', '', '', '', '',], 
+      ['', '', '', '', '',], 
+      ['', '', '', '', '',], 
+      ['', '', '', '', '',], 
+      ['', '', '', '', '',], 
+      ['', '', '', '', '',],],
+    URcolors: [
+      ['', '', '', '', '',], 
+      ['', '', '', '', '',], 
+      ['', '', '', '', '',], 
+      ['', '', '', '', '',], 
+      ['', '', '', '', '',], 
+      ['', '', '', '', '',], 
+      ['', '', '', '', '',], 
+      ['', '', '', '', '',], 
+      ['', '', '', '', '',],
+    ],
+    BLcolors: [
+      ['', '', '', '', '',], 
+      ['', '', '', '', '',], 
+      ['', '', '', '', '',], 
+      ['', '', '', '', '',], 
+      ['', '', '', '', '',], 
+      ['', '', '', '', '',], 
+      ['', '', '', '', '',], 
+      ['', '', '', '', '',], 
+      ['', '', '', '', '',],
+    ],
+    BRcolors: [
+      ['', '', '', '', '',], 
+      ['', '', '', '', '',], 
+      ['', '', '', '', '',], 
+      ['', '', '', '', '',], 
+      ['', '', '', '', '',], 
+      ['', '', '', '', '',], 
+      ['', '', '', '', '',], 
+      ['', '', '', '', '',], 
+      ['', '', '', '', '',],
+    ],
+  });
 
   const log = () => {
     console.log('state:', gameState);
   }
 
   updateGameState = (letterPressed) => {
-    console.log('pressed', letterPressed);
-    let newState = {...gameState};
-    newState.qNW = 'green'
-    newState.qSE = 'gray'
-    setGameState(newState);
-    console.log('state:', gameState);
+    if (letterPressed === 'submit') {
+      console.log('submit pressed')
+    }
+    else if (letterPressed === 'backspace') {
+      console.log('backspace pressed');
+      if (guess.length > 0) {
+        const newGuess = guess.slice(0, -1);  // remove last letter
+        setGuess(newGuess);
+        let newTileboardState = {...tileboardState}
+        newTileboardState.UL[guessNumber] = newGuess;
+        setTileboardState(newTileboardState);
+      }
+    }
+    else {
+      console.log('pressed', letterPressed);
+      if (guess.length < 5) {
+        let newGuess = guess + letterPressed;
+        setGuess(newGuess);
+        let newTileboardState = {...tileboardState}
+        newTileboardState.UL[guessNumber] = newGuess;
+        setTileboardState(newTileboardState);
+      }
+    }
+
+    console.log(guess);
+    
+    // let newState = {...gameState};
+    // newState.qNW = 'green'
+    // newState.qSE = 'gray'
+    // setGameState(newState);
+    // console.log('state:', gameState);
   }
 
   return (
@@ -53,7 +133,7 @@ const App = () => {
           title='Fetch Random Word'
         />
       </View>
-      <Tileboard />
+      <Tileboard UL={tileboardState.UL} ULcolors={tileboardState.ULcolors}/>
 
       <View style={{height: 20,}}></View>
 

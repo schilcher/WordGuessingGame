@@ -1,15 +1,48 @@
 import React, { useEffect } from 'react';
-import {StyleSheet, View, Text, Pressable} from 'react-native';
+import {StyleSheet, View, Text, Pressable, useWindowDimensions} from 'react-native';
 import Key from './key';
+import Icon from "react-native-vector-icons/Ionicons";  // cd ios && pod install
 
 const Keyboard = (props) => {
+    const windowWidth = useWindowDimensions().width;
+    const { styles } = useStyle(windowWidth);
+    backspaceIconSize = Math.floor(windowWidth / 13) + 1;
 
     useEffect(() => {
-        console.log('props:', props.gamestate.qNE)
+        //console.log('props:', props.gamestate.qNE)
     }, [])
 
     return (
         <View style={styles.mainViewStyle}>
+            <View style={styles.submitRowView}>
+
+                <View style={styles.spacerViewStyle}></View>
+                
+                <Pressable
+                    onPress={() => {updateGameState('submit')}}
+                    style ={({pressed}) => [
+                        {backgroundColor: pressed ? 'lightblue' : 'transparent'}]}>
+                    <View style={styles.submitButtonView}>
+                        <Text style={styles.submitTextStyle}>SUBMIT</Text>
+                    </View>
+                </Pressable>
+
+                <Pressable
+                    onPress={() => {updateGameState('backspace')}}
+                    style={({pressed}) => [
+                        {backgroundColor: pressed ? 'lightblue' : 'transparent'}]}>
+                    <View style={styles.backspaceButtonView}>
+                        {/*<Text style={styles.backspaceTextStyle}>{'<'}</Text>*/}
+                        {/*<Icon name='delete'/>*/}
+                        <Icon
+                            name="backspace-outline"
+                            color="white"
+                            size={backspaceIconSize}
+                        />
+                    </View>
+                </Pressable>
+            </View>
+
             <View style={styles.qLetterRowView}>
                 <Pressable 
                     onPress={() => {updateGameState('Q')}}
@@ -197,35 +230,74 @@ const Keyboard = (props) => {
                     <Key letter='M' NW={props.gamestate.mNW} SW={props.gamestate.mSW} NE={props.gamestate.mNE} SE={props.gamestate.mSE}/>
                 </Pressable>
 
-                <Pressable
-                    onPress={() => {updateGameState('backspace')}}
-                    style={({pressed}) => [
-                        {backgroundColor: pressed ? 'lightblue' : 'transparent'}]}>
-                    <Key letter='<' NW='red' SW='red' NE='red' SE='red'/>
-                </Pressable>
             </View>
         </View>
     );
 }
 
-const styles = StyleSheet.create({
-    mainViewStyle: {
-        
-    },
-    submitButtonView: {
+const useStyle = (windowWidth) => {
+    // round down to remove decimal to prevent line between views on keys
+    const keyWidth = Math.floor(windowWidth / 26) * 2;
+    const keyHeight = Math.floor(windowWidth / 24) * 2;
+    const fontSize = Math.floor(windowWidth / 14);
+    
+    const styles = StyleSheet.create({
+        mainViewStyle: {
+            
+        },
+        submitButtonView: {
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+            alignSelf: 'center',
+            borderRadius: 5,
+            backgroundColor: 'green',
+            width: keyWidth * 6,
+            height: keyHeight,
+        },
+        backspaceButtonView: {
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+            alignSelf: 'center',
+            borderRadius: 5,
+            backgroundColor: 'red',
+            width: keyWidth + 10,
+            height: keyHeight,
+            marginLeft: 10,
+        },
+        spacerViewStyle: {
+            width: keyWidth + 10,
+            height: keyHeight,
+            marginRight: 10,
+        },
+        submitRowView: {
+            flexDirection: 'row',
+            justifyContent: 'center',
+            marginBottom: 5,
+        },
+        qLetterRowView: {
+            flexDirection: 'row',
+            justifyContent: 'center',
+        },
+        letterRowView: {
+            flexDirection: 'row',
+            justifyContent: 'center',
+        },
+        backspaceView: {
+            backgroundColor: 'red',
+        },
+        submitTextStyle: {
+            color: 'white',
+            fontSize: fontSize,
+        },
+        backspaceTextStyle: {
+            color: 'white',
+            fontSize: fontSize,
+        },
+    })
 
-    },
-    qLetterRowView: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-    },
-    letterRowView: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-    },
-    backspaceView: {
-        backgroundColor: 'red',
-    },
-})
+    return {styles}
+}
 
 export default Keyboard;
